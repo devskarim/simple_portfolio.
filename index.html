@@ -1,0 +1,2019 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Izzatulloh Karimov - Backend Developer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+        
+        :root {
+            --primary-color: #000000;
+            --secondary-color: #333333;
+            --accent-color: #666666;
+            --text-primary: #000000;
+            --text-secondary: #666666;
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8f9fa;
+            --border-color: #e5e7eb;
+        }
+
+        [data-theme="dark"] {
+            --text-primary: #ffffff;
+            --text-secondary: #cccccc;
+            --bg-primary: #000000;
+            --bg-secondary: #111111;
+            --border-color: #333333;
+            --primary-color: #ffffff;
+            --secondary-color: #cccccc;
+            --accent-color: #999999;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+            overflow-x: hidden;
+        }
+
+        /* Loading Screen - Drop-in Animation */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--bg-primary);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            overflow: hidden;
+            transition: opacity 0.8s ease;
+        }
+
+        .loading-text {
+            font-family: 'Inter', sans-serif;
+            font-size: 80px;
+            font-weight: 700;
+            color: var(--text-primary);
+            display: flex;
+            gap: 5px;
+            animation: moveToLogo 2s ease-in-out forwards;
+            animation-delay: 1.2s;
+            position: relative;
+        }
+
+        .letter {
+            opacity: 0;
+            transform: translateY(-150px) scale(0.8);
+            animation: dropIn 1s forwards;
+        }
+
+        .letter:nth-child(1) { animation-delay: 0s; }
+        .letter:nth-child(2) { animation-delay: 0.1s; }
+        .letter:nth-child(3) { animation-delay: 0.2s; }
+        .letter:nth-child(4) { animation-delay: 0.3s; }
+        .letter:nth-child(5) { animation-delay: 0.4s; }
+        .letter:nth-child(6) { animation-delay: 0.5s; }
+        .letter:nth-child(7) { animation-delay: 0.6s; }
+
+        @keyframes dropIn {
+            0% {
+                opacity: 0;
+                transform: translateY(-150px) scale(0.8);
+            }
+            60% {
+                opacity: 1;
+                transform: translateY(0) scale(1.3);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        @keyframes moveToLogo {
+            0% {
+                transform: translate(0, 0) scale(1);
+            }
+            100% {
+                transform: translate(-40vw, -35vh) scale(0.35);
+            }
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background-color: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        [data-theme="dark"] .navbar {
+            background-color: rgba(0, 0, 0, 0.95);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            font-size: 1.5rem;
+            font-weight: 300;
+            color: var(--text-primary);
+            letter-spacing: 0.2em;
+            text-decoration: none;
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.875rem;
+            font-weight: 400;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .nav-link:hover {
+            color: var(--text-primary);
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background-color: var(--text-primary);
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        /* Language Selector */
+        .language-selector {
+            position: relative;
+            display: inline-block;
+        }
+
+        .language-btn {
+            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+            border: 2px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 0.6rem 1.2rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            border-radius: 8px;
+            box-shadow: 
+                0 2px 8px rgba(0, 0, 0, 0.1),
+                inset 0 1px 2px rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .language-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .language-btn:hover::before {
+            left: 100%;
+        }
+
+        .language-btn:hover {
+            border-color: var(--text-primary);
+            transform: translateY(-2px);
+            box-shadow: 
+                0 4px 15px rgba(0, 0, 0, 0.15),
+                inset 0 1px 2px rgba(255, 255, 255, 0.2);
+        }
+
+        .language-btn span:last-child {
+            transition: transform 0.3s ease;
+            font-size: 0.6rem;
+        }
+
+        .language-dropdown.active + .language-btn span:last-child,
+        .language-selector:hover .language-btn span:last-child {
+            transform: rotate(180deg);
+        }
+
+        .language-dropdown {
+            position: absolute;
+            top: calc(100% + 8px);
+            right: 0;
+            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            min-width: 140px;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-15px) scale(0.95);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 
+                0 10px 30px rgba(0, 0, 0, 0.15),
+                0 4px 15px rgba(0, 0, 0, 0.1),
+                inset 0 1px 2px rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            overflow: hidden;
+        }
+
+        .language-dropdown.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0) scale(1);
+        }
+
+        .language-option {
+            display: block;
+            width: 100%;
+            padding: 0.8rem 1.2rem;
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 0.75rem;
+            font-weight: 500;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            text-align: left;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .language-option::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .language-option:hover::before {
+            left: 100%;
+        }
+
+        .language-option:hover {
+            color: var(--text-primary);
+            background: linear-gradient(135deg, var(--bg-secondary) 0%, rgba(255, 255, 255, 0.05) 100%);
+            transform: translateX(4px);
+        }
+
+        .language-option.active {
+            color: var(--text-primary);
+            background: linear-gradient(135deg, var(--text-primary) 0%, var(--secondary-color) 100%);
+            color: var(--bg-primary);
+            font-weight: 600;
+        }
+
+        .language-option.active::after {
+            content: '✓';
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 0.8rem;
+        }
+
+        /* Language flag emojis */
+        .language-option[data-lang="en"]::before { content: '🇺🇸 '; }
+        .language-option[data-lang="uz"]::before { content: '🇺🇿 '; }
+        .language-option[data-lang="ru"]::before { content: '🇷🇺 '; }
+
+        .language-option::before {
+            position: static;
+            margin-right: 0.5rem;
+        }
+
+        /* Enhanced Theme Toggle */
+        .theme-toggle {
+            width: 60px;
+            height: 30px;
+            background: linear-gradient(135deg, #87CEEB 0%, #4A90E2 50%, #98D8E8 100%);
+            border-radius: 15px;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            overflow: hidden;
+            box-shadow: 
+                0 4px 15px rgba(135, 206, 235, 0.3),
+                inset 0 2px 4px rgba(255, 255, 255, 0.2),
+                inset 0 -2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        [data-theme="dark"] .theme-toggle {
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+            border-color: rgba(255, 255, 255, 0.2);
+            box-shadow: 
+                0 4px 15px rgba(26, 26, 46, 0.5),
+                inset 0 2px 4px rgba(255, 255, 255, 0.1),
+                inset 0 -2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .theme-toggle::before {
+            content: '';
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 22px;
+            height: 22px;
+            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+            border-radius: 50%;
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 
+                0 0 10px rgba(255, 215, 0, 0.5),
+                0 0 20px rgba(255, 215, 0, 0.3),
+                0 2px 4px rgba(0, 0, 0, 0.2);
+            z-index: 2;
+        }
+
+        [data-theme="dark"] .theme-toggle::before {
+            transform: translateX(30px);
+            background: linear-gradient(135deg, #C0C0C0 0%, #E6E6FA 100%);
+            box-shadow: 
+                0 0 10px rgba(192, 192, 192, 0.5),
+                0 0 20px rgba(192, 192, 192, 0.3),
+                0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Sun rays */
+        .theme-toggle .sun-rays {
+            position: absolute;
+            top: 50%;
+            left: 14px;
+            width: 22px;
+            height: 22px;
+            transform: translateY(-50%);
+            opacity: 1;
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 1;
+        }
+
+        [data-theme="dark"] .theme-toggle .sun-rays {
+            opacity: 0;
+            transform: translateY(-50%) translateX(30px) rotate(180deg);
+        }
+
+        .theme-toggle .sun-ray {
+            position: absolute;
+            width: 2px;
+            height: 6px;
+            background: linear-gradient(to bottom, #FFD700, transparent);
+            border-radius: 1px;
+            transform-origin: center 11px;
+        }
+
+        .theme-toggle .sun-ray:nth-child(1) { transform: rotate(0deg); top: -3px; left: 10px; }
+        .theme-toggle .sun-ray:nth-child(2) { transform: rotate(45deg); top: 1px; right: 1px; }
+        .theme-toggle .sun-ray:nth-child(3) { transform: rotate(90deg); right: -3px; top: 10px; }
+        .theme-toggle .sun-ray:nth-child(4) { transform: rotate(135deg); bottom: 1px; right: 1px; }
+        .theme-toggle .sun-ray:nth-child(5) { transform: rotate(180deg); bottom: -3px; left: 10px; }
+        .theme-toggle .sun-ray:nth-child(6) { transform: rotate(225deg); bottom: 1px; left: 1px; }
+        .theme-toggle .sun-ray:nth-child(7) { transform: rotate(270deg); left: -3px; top: 10px; }
+        .theme-toggle .sun-ray:nth-child(8) { transform: rotate(315deg); top: 1px; left: 1px; }
+
+        /* Stars animation for dark theme */
+        .theme-toggle .stars {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 0.6s ease;
+            z-index: 1;
+        }
+
+        [data-theme="dark"] .theme-toggle .stars {
+            opacity: 1;
+        }
+
+        .theme-toggle .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: #ffffff;
+            border-radius: 50%;
+            animation: twinkle 3s infinite;
+            box-shadow: 0 0 4px rgba(255, 255, 255, 0.8);
+        }
+
+        .theme-toggle .star:nth-child(1) { top: 25%; left: 15%; animation-delay: 0s; }
+        .theme-toggle .star:nth-child(2) { top: 45%; left: 25%; animation-delay: 1s; }
+        .theme-toggle .star:nth-child(3) { top: 65%; left: 20%; animation-delay: 2s; }
+        .theme-toggle .star:nth-child(4) { top: 30%; left: 35%; animation-delay: 0.5s; }
+        .theme-toggle .star:nth-child(5) { top: 55%; left: 40%; animation-delay: 1.5s; }
+
+        @keyframes twinkle {
+            0%, 100% { 
+                opacity: 0.3; 
+                transform: scale(1);
+                box-shadow: 0 0 2px rgba(255, 255, 255, 0.3);
+            }
+            50% { 
+                opacity: 1; 
+                transform: scale(1.5);
+                box-shadow: 0 0 8px rgba(255, 255, 255, 1);
+            }
+        }
+
+        /* Ripple effect */
+        .theme-toggle::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 120px;
+            height: 120px;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, transparent 70%);
+            border-radius: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .theme-toggle.animating::after {
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        /* Hover effects */
+        .theme-toggle:hover {
+            transform: scale(1.05);
+            box-shadow: 
+                0 6px 20px rgba(135, 206, 235, 0.4),
+                inset 0 2px 4px rgba(255, 255, 255, 0.3),
+                inset 0 -2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        [data-theme="dark"] .theme-toggle:hover {
+            box-shadow: 
+                0 6px 20px rgba(26, 26, 46, 0.6),
+                inset 0 2px 4px rgba(255, 255, 255, 0.2),
+                inset 0 -2px 4px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background-color: var(--bg-primary);
+        }
+
+        .hero-content {
+            max-width: 800px;
+            padding: 0 2rem;
+        }
+
+        .hero-title {
+            font-size: 4rem;
+            font-weight: 300;
+            color: var(--text-primary);
+            letter-spacing: 0.1em;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            font-weight: 400;
+            color: var(--text-secondary);
+            letter-spacing: 0.05em;
+            margin-bottom: 2rem;
+            text-transform: uppercase;
+        }
+
+        .hero-description {
+            font-size: 1rem;
+            font-weight: 300;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 3rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 1rem 2rem;
+            font-size: 0.875rem;
+            font-weight: 400;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            text-decoration: none;
+            border: 1px solid var(--text-primary);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            background: none;
+        }
+
+        .btn-primary {
+            background-color: var(--text-primary);
+            color: var(--bg-primary);
+        }
+
+        .btn-primary:hover {
+            background-color: transparent;
+            color: var(--text-primary);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--text-primary);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--text-primary);
+            color: var(--bg-primary);
+        }
+
+        /* Sections */
+        .section {
+            padding: 6rem 0;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding-left: 2rem;
+            padding-right: 2rem;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 300;
+            color: var(--text-primary);
+            letter-spacing: 0.1em;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .section-subtitle {
+            font-size: 1rem;
+            font-weight: 300;
+            color: var(--text-secondary);
+            text-align: center;
+            margin-bottom: 4rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Grid Layouts */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        /* Cards */
+        .card {
+            background-color: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            padding: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            border-color: var(--text-primary);
+            transform: translateY(-5px);
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 400;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            letter-spacing: 0.05em;
+        }
+
+        .card-text {
+            font-size: 0.875rem;
+            font-weight: 300;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Skills */
+        .skill-item {
+            margin-bottom: 1.5rem;
+        }
+
+        .skill-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+
+        .skill-name {
+            font-size: 0.875rem;
+            font-weight: 400;
+            color: var(--text-primary);
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        .skill-percentage {
+            font-size: 0.875rem;
+            font-weight: 300;
+            color: var(--text-secondary);
+        }
+
+        .skill-bar {
+            height: 1px;
+            background-color: var(--border-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .skill-progress {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            background-color: var(--text-primary);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 1s ease;
+        }
+
+        .skill-progress.animate {
+            transform: scaleX(1);
+        }
+
+        /* Projects */
+        .project-card {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .project-card:hover {
+            border-color: var(--text-primary);
+            transform: translateY(-5px);
+        }
+
+        .project-image {
+            height: 250px;
+            background-color: var(--bg-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .project-content {
+            padding: 2rem;
+        }
+
+        .project-title {
+            font-size: 1.25rem;
+            font-weight: 400;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            letter-spacing: 0.05em;
+        }
+
+        .project-description {
+            font-size: 0.875rem;
+            font-weight: 300;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .project-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .project-tag {
+            padding: 0.25rem 0.75rem;
+            font-size: 0.75rem;
+            font-weight: 400;
+            color: var(--text-secondary);
+            border: 1px solid var(--border-color);
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        .project-link {
+            font-size: 0.875rem;
+            font-weight: 400;
+            color: var(--text-primary);
+            text-decoration: none;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            transition: opacity 0.3s ease;
+        }
+
+        .project-link:hover {
+            opacity: 0.7;
+        }
+
+        /* Project Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 10000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background-color: var(--bg-primary);
+            margin: 5% auto;
+            padding: 0;
+            border: 1px solid var(--border-color);
+            width: 90%;
+            max-width: 800px;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .modal-header {
+            padding: 2rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 400;
+            color: var(--text-primary);
+            letter-spacing: 0.05em;
+        }
+
+        .close {
+            color: var(--text-secondary);
+            font-size: 2rem;
+            font-weight: 300;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .close:hover {
+            color: var(--text-primary);
+        }
+
+        .modal-body {
+            padding: 2rem;
+        }
+
+        .modal-section {
+            margin-bottom: 2rem;
+        }
+
+        .modal-section h3 {
+            font-size: 1.25rem;
+            font-weight: 400;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            letter-spacing: 0.05em;
+        }
+
+        .modal-section p {
+            font-size: 0.875rem;
+            font-weight: 300;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .modal-section ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .modal-section li {
+            font-size: 0.875rem;
+            font-weight: 300;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 0.5rem;
+            padding-left: 1rem;
+            position: relative;
+        }
+
+        .modal-section li::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: var(--text-primary);
+        }
+
+        /* Contact */
+        .contact-info {
+            margin-bottom: 2rem;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .contact-icon {
+            width: 40px;
+            height: 40px;
+            border: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            font-size: 1rem;
+        }
+
+        .contact-details h4 {
+            font-size: 0.875rem;
+            font-weight: 400;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        .contact-details p {
+            font-size: 0.875rem;
+            font-weight: 300;
+            color: var(--text-secondary);
+        }
+
+        /* Form */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 1rem;
+            background-color: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            font-size: 0.875rem;
+            font-weight: 300;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--text-primary);
+        }
+
+        .form-input::placeholder {
+            color: var(--text-secondary);
+            font-weight: 300;
+        }
+
+        /* Footer */
+        .footer {
+            background-color: var(--bg-secondary);
+            border-top: 1px solid var(--border-color);
+            padding: 3rem 0;
+            text-align: center;
+        }
+
+        .footer-text {
+            font-size: 0.875rem;
+            font-weight: 300;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        /* Animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .slide-in-left {
+            opacity: 0;
+            transform: translateX(-30px);
+            transition: all 0.8s ease;
+        }
+
+        .slide-in-left.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .slide-in-right {
+            opacity: 0;
+            transform: translateX(30px);
+            transition: all 0.8s ease;
+        }
+
+        .slide-in-right.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .loading-text {
+                font-size: 60px;
+            }
+
+            @keyframes moveToLogo {
+                0% {
+                    transform: translate(0, 0) scale(1);
+                }
+                100% {
+                    transform: translate(-30vw, -35vh) scale(0.4);
+                }
+            }
+
+            .nav-menu {
+                display: none;
+            }
+
+            .hero-title {
+                font-size: 2.5rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .grid-2,
+            .grid-3 {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .btn {
+                width: 100%;
+                max-width: 300px;
+            }
+
+            .modal-content {
+                width: 95%;
+                margin: 10% auto;
+            }
+        }
+
+        /* Mobile Menu */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .nav-menu {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background-color: var(--bg-primary);
+                border-top: 1px solid var(--border-color);
+                flex-direction: column;
+                padding: 2rem;
+                gap: 1rem;
+            }
+
+            .nav-menu.active {
+                display: flex;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-text" id="loadingText">
+            <span class="letter">K</span>
+            <span class="letter">A</span>
+            <span class="letter">R</span>
+            <span class="letter">I</span>
+            <span class="letter">M</span>
+            <span class="letter">O</span>
+            <span class="letter">V</span>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="#" class="nav-logo">KARIMOV</a>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="#about" class="nav-link" data-translate="nav_about">About</a></li>
+                <li><a href="#skills" class="nav-link" data-translate="nav_skills">Skills</a></li>
+                <li><a href="#projects" class="nav-link" data-translate="nav_projects">Projects</a></li>
+                <li><a href="#contact" class="nav-link" data-translate="nav_contact">Contact</a></li>
+                <li>
+                    <div class="language-selector">
+                        <button class="language-btn" id="languageBtn">
+                            <span id="currentLang">EN</span>
+                            <span style="font-size: 0.6rem;">▼</span>
+                        </button>
+                        <div class="language-dropdown" id="languageDropdown">
+                            <button class="language-option active" data-lang="en">English</button>
+                            <button class="language-option" data-lang="uz">O'zbekcha</button>
+                            <button class="language-option" data-lang="ru">Русский</button>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="theme-toggle" id="themeToggle">
+                        <div class="sun-rays">
+                            <div class="sun-ray"></div>
+                            <div class="sun-ray"></div>
+                            <div class="sun-ray"></div>
+                            <div class="sun-ray"></div>
+                            <div class="sun-ray"></div>
+                            <div class="sun-ray"></div>
+                            <div class="sun-ray"></div>
+                            <div class="sun-ray"></div>
+                        </div>
+                        <div class="stars">
+                            <div class="star"></div>
+                            <div class="star"></div>
+                            <div class="star"></div>
+                            <div class="star"></div>
+                            <div class="star"></div>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+            <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content fade-in">
+            <h1 class="hero-title">IZZATULLOH KARIMOV</h1>
+            <p class="hero-subtitle" data-translate="hero_subtitle">Backend Developer</p>
+            <p class="hero-description" data-translate="hero_description">
+                Crafting robust, scalable backend solutions with 3+ years of experience in Python, Django, and cloud technologies. 
+                Based in Andijan, Uzbekistan.
+            </p>
+            <div class="hero-buttons">
+                <a href="#projects" class="btn btn-primary" data-translate="hero_btn_projects">View Projects</a>
+                <a href="#contact" class="btn btn-secondary" data-translate="hero_btn_contact">Get In Touch</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="section" style="background-color: var(--bg-secondary);">
+        <h2 class="section-title fade-in" data-translate="about_title">About</h2>
+        <p class="section-subtitle fade-in" data-translate="about_subtitle">Professional backend developer with a passion for clean, efficient code</p>
+        
+        <div class="grid-2">
+            <div class="slide-in-left">
+                <div style="height: 400px; background-color: var(--bg-primary); border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: 600; color: var(--text-primary);">
+                    DEVELOPER
+                </div>
+            </div>
+            <div class="slide-in-right">
+                <h3 style="font-size: 1.5rem; font-weight: 400; color: var(--text-primary); margin-bottom: 1.5rem; letter-spacing: 0.05em;" data-translate="about_journey">My Journey</h3>
+                <p style="font-size: 0.875rem; font-weight: 300; color: var(--text-secondary); line-height: 1.6; margin-bottom: 1.5rem;" data-translate="about_description1">
+                    With over 3 years of experience in backend development, I specialize in building scalable, 
+                    high-performance systems using Python and Django. I'm passionate about clean architecture, 
+                    API design, and creating solutions that make a real impact.
+                </p>
+                <p style="font-size: 0.875rem; font-weight: 300; color: var(--text-secondary); line-height: 1.6; margin-bottom: 2rem;" data-translate="about_description2">
+                    I believe in continuous learning and staying up-to-date with the latest technologies. 
+                    My goal is to write code that is not only functional but also maintainable and elegant.
+                </p>
+                
+                <div class="grid-2" style="gap: 1rem;">
+                    <div class="card" style="text-align: center; padding: 1.5rem;">
+                        <h4 style="font-size: 0.875rem; font-weight: 400; color: var(--text-primary); margin-bottom: 0.5rem; letter-spacing: 0.05em; text-transform: uppercase;" data-translate="about_experience">Experience</h4>
+                        <p style="font-size: 1.5rem; font-weight: 300; color: var(--text-secondary);" data-translate="about_experience_value">3+ Years</p>
+                    </div>
+                    <div class="card" style="text-align: center; padding: 1.5rem;">
+                        <h4 style="font-size: 0.875rem; font-weight: 400; color: var(--text-primary); margin-bottom: 0.5rem; letter-spacing: 0.05em; text-transform: uppercase;" data-translate="about_projects">Projects</h4>
+                        <p style="font-size: 1.5rem; font-weight: 300; color: var(--text-secondary);" data-translate="about_projects_value">50+ Completed</p>
+                    </div>
+                    <div class="card" style="text-align: center; padding: 1.5rem;">
+                        <h4 style="font-size: 0.875rem; font-weight: 400; color: var(--text-primary); margin-bottom: 0.5rem; letter-spacing: 0.05em; text-transform: uppercase;" data-translate="about_location">Location</h4>
+                        <p style="font-size: 1.5rem; font-weight: 300; color: var(--text-secondary);" data-translate="about_location_value">Andijan, UZ</p>
+                    </div>
+                    <div class="card" style="text-align: center; padding: 1.5rem;">
+                        <h4 style="font-size: 0.875rem; font-weight: 400; color: var(--text-primary); margin-bottom: 0.5rem; letter-spacing: 0.05em; text-transform: uppercase;" data-translate="about_response">Response</h4>
+                        <p style="font-size: 1.5rem; font-weight: 300; color: var(--text-secondary);" data-translate="about_response_value">< 24 Hours</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" class="section">
+        <h2 class="section-title fade-in" data-translate="skills_title">Skills & Expertise</h2>
+        <p class="section-subtitle fade-in" data-translate="skills_subtitle">Technologies I work with to build amazing backend solutions</p>
+        
+        <div class="grid-3">
+            <div class="card fade-in">
+                <div style="text-align: center; font-size: 2rem; font-weight: 600; color: var(--text-primary); margin-bottom: 1.5rem;">BACKEND</div>
+                <h3 class="card-title" style="text-align: center;" data-translate="skills_backend">Backend Development</h3>
+                <div class="skill-item">
+                    <div class="skill-header">
+                        <span class="skill-name">Python</span>
+                        <span class="skill-percentage">95%</span>
+                    </div>
+                    <div class="skill-bar">
+                        <div class="skill-progress" style="width: 95%;"></div>
+                    </div>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-header">
+                        <span class="skill-name">Django</span>
+                        <span class="skill-percentage">90%</span>
+                    </div>
+                    <div class="skill-bar">
+                        <div class="skill-progress" style="width: 90%;"></div>
+                    </div>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-header">
+                        <span class="skill-name">FastAPI</span>
+                        <span class="skill-percentage">85%</span>
+                    </div>
+                    <div class="skill-bar">
+                        <div class="skill-progress" style="width: 85%;"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card fade-in">
+                <div style="text-align: center; font-size: 2rem; font-weight: 600; color: var(--text-primary); margin-bottom: 1.5rem;">DATABASE</div>
+                <h3 class="card-title" style="text-align: center;" data-translate="skills_database">Database & APIs</h3>
+                <div class="skill-item">
+                    <div class="skill-header">
+                        <span class="skill-name">PostgreSQL</span>
+                        <span class="skill-percentage">90%</span>
+                    </div>
+                    <div class="skill-bar">
+                        <div class="skill-progress" style="width: 90%;"></div>
+                    </div>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-header">
+                        <span class="skill-name">Redis</span>
+                        <span class="skill-percentage">80%</span>
+                    </div>
+                    <div class="skill-bar">
+                        <div class="skill-progress" style="width: 80%;"></div>
+                    </div>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-header">
+                        <span class="skill-name">API Design</span>
+                        <span class="skill-percentage">95%</span>
+                    </div>
+                    <div class="skill-bar">
+                        <div class="skill-progress" style="width: 95%;"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card fade-in">
+                <div style="text-align: center; font-size: 2rem; font-weight: 600; color: var(--text-primary); margin-bottom: 1.5rem;">DEVOPS</div>
+                <h3 class="card-title" style="text-align: center;" data-translate="skills_devops">DevOps & Deployment</h3>
+                <div class="skill-item">
+                    <div class="skill-header">
+                        <span class="skill-name">Docker</span>
+                        <span class="skill-percentage">85%</span>
+                    </div>
+                    <div class="skill-bar">
+                        <div class="skill-progress" style="width: 85%;"></div>
+                    </div>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-header">
+                        <span class="skill-name">AWS</span>
+                        <span class="skill-percentage">75%</span>
+                    </div>
+                    <div class="skill-bar">
+                        <div class="skill-progress" style="width: 75%;"></div>
+                    </div>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-header">
+                        <span class="skill-name">Linux</span>
+                        <span class="skill-percentage">80%</span>
+                    </div>
+                    <div class="skill-bar">
+                        <div class="skill-progress" style="width: 80%;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="section" style="background-color: var(--bg-secondary);">
+        <h2 class="section-title fade-in" data-translate="projects_title">Featured Projects</h2>
+        <p class="section-subtitle fade-in" data-translate="projects_subtitle">Some of my recent work that I'm proud of</p>
+        
+        <div class="grid-2" style="grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));">
+            <div class="project-card fade-in" onclick="openProjectModal('analytics')">
+                <div class="project-image">ANALYTICS</div>
+                <div class="project-content">
+                    <h3 class="project-title" data-translate="project_analytics_title">Analytics Dashboard</h3>
+                    <p class="project-description" data-translate="project_analytics_desc">Real-time data processing and visualization platform with custom analytics engine and automated reporting.</p>
+                    <div class="project-tags">
+                        <span class="project-tag">Python</span>
+                        <span class="project-tag">Celery</span>
+                        <span class="project-tag">MongoDB</span>
+                    </div>
+                    <span class="project-link" data-translate="project_view">View Project →</span>
+                </div>
+            </div>
+            
+            <div class="project-card fade-in" onclick="openProjectModal('financial')">
+                <div class="project-image">FINANCIAL</div>
+                <div class="project-content">
+                    <h3 class="project-title" data-translate="project_financial_title">Financial API System</h3>
+                    <p class="project-description" data-translate="project_financial_desc">High-performance RESTful API with advanced security features, rate limiting, and real-time transaction processing.</p>
+                    <div class="project-tags">
+                        <span class="project-tag">FastAPI</span>
+                        <span class="project-tag">Redis</span>
+                        <span class="project-tag">JWT</span>
+                    </div>
+                    <span class="project-link" data-translate="project_view">View Project →</span>
+                </div>
+            </div>
+            
+            <div class="project-card fade-in" onclick="openProjectModal('cms')">
+                <div class="project-image">CMS</div>
+                <div class="project-content">
+                    <h3 class="project-title" data-translate="project_cms_title">Content Management API</h3>
+                    <p class="project-description" data-translate="project_cms_desc">Headless CMS with multi-tenant architecture, role-based permissions, and advanced content versioning.</p>
+                    <div class="project-tags">
+                        <span class="project-tag">Django REST</span>
+                        <span class="project-tag">GraphQL</span>
+                        <span class="project-tag">Docker</span>
+                    </div>
+                    <span class="project-link" data-translate="project_view">View Project →</span>
+                </div>
+            </div>
+            
+            <div class="project-card fade-in" onclick="openProjectModal('ecommerce')">
+                <div class="project-image">E-COMMERCE</div>
+                <div class="project-content">
+                    <h3 class="project-title" data-translate="project_ecommerce_title">E-Commerce Platform</h3>
+                    <p class="project-description" data-translate="project_ecommerce_desc">Scalable e-commerce backend with payment integration, inventory management, and order processing system.</p>
+                    <div class="project-tags">
+                        <span class="project-tag">Django</span>
+                        <span class="project-tag">PostgreSQL</span>
+                        <span class="project-tag">Stripe</span>
+                    </div>
+                    <span class="project-link" data-translate="project_view">View Project →</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Project Modals -->
+    <div id="analyticsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Analytics Dashboard</h2>
+                <span class="close" onclick="closeModal('analyticsModal')">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="modal-section">
+                    <h3>Project Overview</h3>
+                    <p>A comprehensive real-time analytics platform designed to process large volumes of data and provide actionable insights through interactive dashboards and automated reporting systems.</p>
+                </div>
+                <div class="modal-section">
+                    <h3>Key Features</h3>
+                    <ul>
+                        <li>Real-time data ingestion and processing</li>
+                        <li>Custom analytics engine with machine learning capabilities</li>
+                        <li>Interactive dashboard with customizable widgets</li>
+                        <li>Automated report generation and scheduling</li>
+                        <li>Multi-tenant architecture with role-based access</li>
+                        <li>RESTful API for third-party integrations</li>
+                    </ul>
+                </div>
+                <div class="modal-section">
+                    <h3>Technologies Used</h3>
+                    <ul>
+                        <li>Python 3.9+ with asyncio for concurrent processing</li>
+                        <li>Celery for distributed task processing</li>
+                        <li>MongoDB for flexible data storage</li>
+                        <li>Redis for caching and session management</li>
+                        <li>Docker for containerization</li>
+                        <li>Nginx for load balancing</li>
+                    </ul>
+                </div>
+                <div class="modal-section">
+                    <h3>Performance Metrics</h3>
+                    <ul>
+                        <li>Processes 1M+ data points per minute</li>
+                        <li>Sub-second query response times</li>
+                        <li>99.9% uptime with auto-scaling</li>
+                        <li>Supports 10,000+ concurrent users</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="financialModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Financial API System</h2>
+                <span class="close" onclick="closeModal('financialModal')">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="modal-section">
+                    <h3>Project Overview</h3>
+                    <p>A high-security financial API system built for handling sensitive financial transactions with enterprise-grade security, compliance, and performance requirements.</p>
+                </div>
+                <div class="modal-section">
+                    <h3>Key Features</h3>
+                    <ul>
+                        <li>PCI DSS compliant transaction processing</li>
+                        <li>Advanced rate limiting and DDoS protection</li>
+                        <li>Real-time fraud detection algorithms</li>
+                        <li>Multi-factor authentication system</li>
+                        <li>Comprehensive audit logging</li>
+                        <li>Automated compliance reporting</li>
+                    </ul>
+                </div>
+                <div class="modal-section">
+                    <h3>Technologies Used</h3>
+                    <ul>
+                        <li>FastAPI for high-performance API development</li>
+                        <li>JWT for secure authentication</li>
+                        <li>Redis for session management and caching</li>
+                        <li>PostgreSQL with encryption at rest</li>
+                        <li>AWS KMS for key management</li>
+                        <li>Kubernetes for orchestration</li>
+                    </ul>
+                </div>
+                <div class="modal-section">
+                    <h3>Security Features</h3>
+                    <ul>
+                        <li>End-to-end encryption</li>
+                        <li>OAuth 2.0 and OpenID Connect</li>
+                        <li>API key management with rotation</li>
+                        <li>Real-time monitoring and alerting</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="cmsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Content Management API</h2>
+                <span class="close" onclick="closeModal('cmsModal')">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="modal-section">
+                    <h3>Project Overview</h3>
+                    <p>A headless CMS solution designed for modern web applications with multi-tenant architecture, flexible content modeling, and powerful API capabilities.</p>
+                </div>
+                <div class="modal-section">
+                    <h3>Key Features</h3>
+                    <ul>
+                        <li>Flexible content modeling with custom fields</li>
+                        <li>Multi-tenant architecture with data isolation</li>
+                        <li>Advanced content versioning and rollback</li>
+                        <li>Role-based permissions and workflow management</li>
+                        <li>GraphQL and REST API endpoints</li>
+                        <li>Content scheduling and publishing workflows</li>
+                    </ul>
+                </div>
+                <div class="modal-section">
+                    <h3>Technologies Used</h3>
+                    <ul>
+                        <li>Django REST Framework for API development</li>
+                        <li>GraphQL with Graphene for flexible queries</li>
+                        <li>PostgreSQL for relational data storage</li>
+                        <li>Docker for containerized deployment</li>
+                        <li>Elasticsearch for full-text search</li>
+                        <li>AWS S3 for media storage</li>
+                    </ul>
+                </div>
+                <div class="modal-section">
+                    <h3>Content Features</h3>
+                    <ul>
+                        <li>Rich text editor with custom blocks</li>
+                        <li>Media library with automatic optimization</li>
+                        <li>SEO optimization tools</li>
+                        <li>Multi-language content support</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="ecommerceModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">E-Commerce Platform</h2>
+                <span class="close" onclick="closeModal('ecommerceModal')">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="modal-section">
+                    <h3>Project Overview</h3>
+                    <p>A comprehensive e-commerce backend platform designed to handle high-volume transactions with integrated payment processing, inventory management, and order fulfillment.</p>
+                </div>
+                <div class="modal-section">
+                    <h3>Key Features</h3>
+                    <ul>
+                        <li>Multi-vendor marketplace support</li>
+                        <li>Real-time inventory tracking</li>
+                        <li>Advanced order management system</li>
+                        <li>Integrated payment gateway (Stripe, PayPal)</li>
+                        <li>Shipping calculator and tracking</li>
+                        <li>Customer loyalty and rewards system</li>
+                    </ul>
+                </div>
+                <div class="modal-section">
+                    <h3>Technologies Used</h3>
+                    <ul>
+                        <li>Django for robust web framework</li>
+                        <li>PostgreSQL for transactional data</li>
+                        <li>Stripe API for payment processing</li>
+                        <li>Celery for background task processing</li>
+                        <li>Redis for caching and sessions</li>
+                        <li>AWS for cloud infrastructure</li>
+                    </ul>
+                </div>
+                <div class="modal-section">
+                    <h3>Business Features</h3>
+                    <ul>
+                        <li>Advanced analytics and reporting</li>
+                        <li>Automated tax calculation</li>
+                        <li>Discount and coupon management</li>
+                        <li>Customer support integration</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Section -->
+    <section id="contact" class="section">
+        <h2 class="section-title fade-in" data-translate="contact_title">Let's Work Together</h2>
+        <p class="section-subtitle fade-in" data-translate="contact_subtitle">Ready to bring your backend project to life? Let's discuss your needs.</p>
+        
+        <div class="grid-2">
+            <div class="slide-in-left">
+                <h3 style="font-size: 1.5rem; font-weight: 400; color: var(--text-primary); margin-bottom: 2rem; letter-spacing: 0.05em;" data-translate="contact_get_in_touch">Get In Touch</h3>
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <div class="contact-icon">@</div>
+                        <div class="contact-details">
+                            <h4 data-translate="contact_email">Email</h4>
+                            <p>devizzatillo@gmail.com</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon">📍</div>
+                        <div class="contact-details">
+                            <h4 data-translate="contact_location_label">Location</h4>
+                            <p data-translate="contact_location_value">Andijan, Uzbekistan</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon">⏰</div>
+                        <div class="contact-details">
+                            <h4 data-translate="contact_response_time">Response Time</h4>
+                            <p data-translate="contact_response_value">Within 24 hours</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+                    <a href="#" style="width: 40px; height: 40px; border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: center; color: var(--text-primary); text-decoration: none; transition: all 0.3s ease;">
+                        <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                        </svg>
+                    </a>
+                    <a href="#" style="width: 40px; height: 40px; border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: center; color: var(--text-primary); text-decoration: none; transition: all 0.3s ease;">
+                        <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                        </svg>
+                    </a>
+                    <a href="#" style="width: 40px; height: 40px; border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: center; color: var(--text-primary); text-decoration: none; transition: all 0.3s ease;">
+                        <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="slide-in-right">
+                <div class="card">
+                    <h4 style="font-size: 1.25rem; font-weight: 400; color: var(--text-primary); margin-bottom: 1rem; letter-spacing: 0.05em;" data-translate="contact_send_message">Send a Message</h4>
+                    <p style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 2rem; padding: 1rem; background-color: var(--bg-secondary); border: 1px solid var(--border-color);" data-translate="contact_demo_text">
+                        <strong>Demo Contact Form:</strong> This is a sample form for portfolio demonstration. In production, this would connect to a backend service.
+                    </p>
+                    <form>
+                        <div class="form-group">
+                            <input type="text" class="form-input" data-translate-placeholder="contact_name_placeholder" placeholder="Your Name" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="email" class="form-input" data-translate-placeholder="contact_email_placeholder" placeholder="Your Email" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-input" data-translate-placeholder="contact_project_placeholder" placeholder="Project Type">
+                        </div>
+                        <div class="form-group">
+                            <textarea class="form-input" rows="5" data-translate-placeholder="contact_message_placeholder" placeholder="Your Message" required></textarea>
+                        </div>
+                        <button type="button" onclick="showContactDemo()" class="btn btn-primary" style="width: 100%;" data-translate="contact_send_btn">Send Message</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p class="footer-text" data-translate="footer_text1">© 2025 Izzatulloh Karimov. Crafted with passion and precision.</p>
+        <p class="footer-text" data-translate="footer_text2">Backend Developer | Python Specialist | Based in Andijan, Uzbekistan</p>
+    </footer>
+
+    <script>
+        // Loading Screen
+        document.addEventListener('DOMContentLoaded', function() {
+            // After animation completes, hide loading screen
+            setTimeout(() => {
+                const loadingScreen = document.getElementById('loadingScreen');
+                loadingScreen.style.opacity = '0';
+                
+                setTimeout(() => {
+                    loadingScreen.style.display = 'none';
+                }, 800);
+            }, 3200);
+        });
+
+        // Translation System
+        const translations = {
+            en: {
+                nav_about: "About",
+                nav_skills: "Skills", 
+                nav_projects: "Projects",
+                nav_contact: "Contact",
+                hero_subtitle: "Backend Developer",
+                hero_description: "Crafting robust, scalable backend solutions with 3+ years of experience in Python, Django, and cloud technologies. Based in Andijan, Uzbekistan.",
+                hero_btn_projects: "View Projects",
+                hero_btn_contact: "Get In Touch",
+                about_title: "About",
+                about_subtitle: "Professional backend developer with a passion for clean, efficient code",
+                about_journey: "My Journey",
+                about_description1: "With over 3 years of experience in backend development, I specialize in building scalable, high-performance systems using Python and Django. I'm passionate about clean architecture, API design, and creating solutions that make a real impact.",
+                about_description2: "I believe in continuous learning and staying up-to-date with the latest technologies. My goal is to write code that is not only functional but also maintainable and elegant.",
+                about_experience: "Experience",
+                about_experience_value: "3+ Years",
+                about_projects: "Projects",
+                about_projects_value: "50+ Completed",
+                about_location: "Location",
+                about_location_value: "Andijan, UZ",
+                about_response: "Response",
+                about_response_value: "< 24 Hours",
+                skills_title: "Skills & Expertise",
+                skills_subtitle: "Technologies I work with to build amazing backend solutions",
+                skills_backend: "Backend Development",
+                skills_database: "Database & APIs",
+                skills_devops: "DevOps & Deployment",
+                projects_title: "Featured Projects",
+                projects_subtitle: "Some of my recent work that I'm proud of",
+                project_analytics_title: "Analytics Dashboard",
+                project_analytics_desc: "Real-time data processing and visualization platform with custom analytics engine and automated reporting.",
+                project_financial_title: "Financial API System",
+                project_financial_desc: "High-performance RESTful API with advanced security features, rate limiting, and real-time transaction processing.",
+                project_cms_title: "Content Management API",
+                project_cms_desc: "Headless CMS with multi-tenant architecture, role-based permissions, and advanced content versioning.",
+                project_ecommerce_title: "E-Commerce Platform",
+                project_ecommerce_desc: "Scalable e-commerce backend with payment integration, inventory management, and order processing system.",
+                project_view: "View Project →",
+                contact_title: "Let's Work Together",
+                contact_subtitle: "Ready to bring your backend project to life? Let's discuss your needs.",
+                contact_get_in_touch: "Get In Touch",
+                contact_email: "Email",
+                contact_location_label: "Location",
+                contact_location_value: "Andijan, Uzbekistan",
+                contact_response_time: "Response Time",
+                contact_response_value: "Within 24 hours",
+                contact_send_message: "Send a Message",
+                contact_demo_text: "Demo Contact Form: This is a sample form for portfolio demonstration. In production, this would connect to a backend service.",
+                contact_name_placeholder: "Your Name",
+                contact_email_placeholder: "Your Email",
+                contact_project_placeholder: "Project Type",
+                contact_message_placeholder: "Your Message",
+                contact_send_btn: "Send Message",
+                footer_text1: "© 2024 Izzatulloh Karimov. Crafted with passion and precision.",
+                footer_text2: "Backend Developer | Python Specialist | Based in Andijan, Uzbekistan"
+            },
+            uz: {
+                nav_about: "Haqida",
+                nav_skills: "Ko'nikmalar",
+                nav_projects: "Loyihalar", 
+                nav_contact: "Aloqa",
+                hero_subtitle: "Backend Dasturchi",
+                hero_description: "Python, Django va bulutli texnologiyalarda 3+ yillik tajriba bilan mustahkam, kengaytiriladigan backend yechimlari yarataman. Toshkent, O'zbekistonda joylashgan.",
+                hero_btn_projects: "Loyihalarni Ko'rish",
+                hero_btn_contact: "Bog'lanish",
+                about_title: "Haqida",
+                about_subtitle: "Toza va samarali kodga ishtiyoqi bor professional backend dasturchi",
+                about_journey: "Mening Yo'lim",
+                about_description1: "Backend ishlab chiqishda 3+ yillik tajriba bilan, men Python va Django yordamida kengaytiriladigan, yuqori samarali tizimlar yaratishga ixtisoslashganman. Toza arxitektura, API dizayni va haqiqiy ta'sir ko'rsatadigan yechimlar yaratishga ishtiyoqliman.",
+                about_description2: "Men doimiy o'rganish va eng so'nggi texnologiyalar bilan hamqadam bo'lishga ishonaman. Mening maqsadim nafaqat ishlaydigan, balki saqlash va nafis bo'lgan kod yozishdir.",
+                about_experience: "Tajriba",
+                about_experience_value: "3+ Yil",
+                about_projects: "Loyihalar",
+                about_projects_value: "50+ Tugallangan",
+                about_location: "Joylashuv",
+                about_location_value: "Andijan, UZ",
+                about_response: "Javob",
+                about_response_value: "< 24 Soat",
+                skills_title: "Ko'nikmalar va Tajriba",
+                skills_subtitle: "Ajoyib backend yechimlari yaratish uchun ishlatadigan texnologiyalar",
+                skills_backend: "Backend Ishlab Chiqish",
+                skills_database: "Ma'lumotlar Bazasi va API",
+                skills_devops: "DevOps va Joylashtirish",
+                projects_title: "Taniqli Loyihalar",
+                projects_subtitle: "Men faxrlanadigan so'nggi ishlarimdan ba'zilari",
+                project_analytics_title: "Analitika Paneli",
+                project_analytics_desc: "Maxsus analitika mexanizmi va avtomatlashtirilgan hisobot bilan real vaqt ma'lumotlarini qayta ishlash va vizualizatsiya platformasi.",
+                project_financial_title: "Moliyaviy API Tizimi",
+                project_financial_desc: "Ilg'or xavfsizlik xususiyatlari, tezlik cheklash va real vaqt tranzaksiya qayta ishlash bilan yuqori samarali RESTful API.",
+                project_cms_title: "Kontent Boshqaruv API",
+                project_cms_desc: "Ko'p ijarachilik arxitekturasi, rol asosidagi ruxsatlar va ilg'or kontent versiyalash bilan boshsiz CMS.",
+                project_ecommerce_title: "Elektron Tijorat Platformasi",
+                project_ecommerce_desc: "To'lov integratsiyasi, inventar boshqaruvi va buyurtma qayta ishlash tizimi bilan kengaytiriladigan elektron tijorat backend.",
+                project_view: "Loyihani Ko'rish →",
+                contact_title: "Birgalikda Ishlaylik",
+                contact_subtitle: "Backend loyihangizni hayotga tatbiq etishga tayyormisiz? Ehtiyojlaringizni muhokama qilaylik.",
+                contact_get_in_touch: "Bog'laning",
+                contact_email: "Elektron Pochta",
+                contact_location_label: "Joylashuv",
+                contact_location_value: "Toshkent, O'zbekiston",
+                contact_response_time: "Javob Vaqti",
+                contact_response_value: "24 soat ichida",
+                contact_send_message: "Xabar Yuborish",
+                contact_demo_text: "Demo Aloqa Formasi: Bu portfolio namoyishi uchun namunaviy forma. Ishlab chiqarishda bu backend xizmatiga ulanadi.",
+                contact_name_placeholder: "Ismingiz",
+                contact_email_placeholder: "Elektron Pochtangiz",
+                contact_project_placeholder: "Loyiha Turi",
+                contact_message_placeholder: "Xabaringiz",
+                contact_send_btn: "Xabar Yuborish",
+                footer_text1: "© 2024 Izzatulloh Karimov. Ishtiyoq va aniqlik bilan yaratilgan.",
+                footer_text2: "Backend Dasturchi | Python Mutaxassisi | Toshkent, O'zbekistonda joylashgan"
+            },
+            ru: {
+                nav_about: "О себе",
+                nav_skills: "Навыки",
+                nav_projects: "Проекты",
+                nav_contact: "Контакты",
+                hero_subtitle: "Backend Разработчик",
+                hero_description: "Создаю надежные, масштабируемые backend решения с 3+ летним опытом работы с Python, Django и облачными технологиями. Базируюсь в Ташкенте, Узбекистан.",
+                hero_btn_projects: "Посмотреть Проекты",
+                hero_btn_contact: "Связаться",
+                about_title: "О себе",
+                about_subtitle: "Профессиональный backend разработчик со страстью к чистому, эффективному коду",
+                about_journey: "Мой Путь",
+                about_description1: "Имея более 3 лет опыта в backend разработке, я специализируюсь на создании масштабируемых, высокопроизводительных систем с использованием Python и Django. Я увлечен чистой архитектурой, дизайном API и созданием решений, которые оказывают реальное влияние.",
+                about_description2: "Я верю в непрерывное обучение и поддержание актуальности с последними технологиями. Моя цель - писать код, который не только функционален, но также поддерживаем и элегантен.",
+                about_experience: "Опыт",
+                about_experience_value: "3+ Года",
+                about_projects: "Проекты",
+                about_projects_value: "50+ Завершено",
+                about_location: "Местоположение",
+                about_location_value: "Andijan, UZ",
+                about_response: "Ответ",
+                about_response_value: "< 24 Часа",
+                skills_title: "Навыки и Экспертиза",
+                skills_subtitle: "Технологии, которые я использую для создания потрясающих backend решений",
+                skills_backend: "Backend Разработка",
+                skills_database: "Базы Данных и API",
+                skills_devops: "DevOps и Развертывание",
+                projects_title: "Избранные Проекты",
+                projects_subtitle: "Некоторые из моих недавних работ, которыми я горжусь",
+                project_analytics_title: "Панель Аналитики",
+                project_analytics_desc: "Платформа обработки и визуализации данных в реальном времени с пользовательским движком аналитики и автоматизированной отчетностью.",
+                project_financial_title: "Финансовая API Система",
+                project_financial_desc: "Высокопроизводительный RESTful API с продвинутыми функциями безопасности, ограничением скорости и обработкой транзакций в реальном времени.",
+                project_cms_title: "API Управления Контентом",
+                project_cms_desc: "Headless CMS с мультитенантной архитектурой, разрешениями на основе ролей и продвинутым версионированием контента.",
+                project_ecommerce_title: "Платформа Электронной Коммерции",
+                project_ecommerce_desc: "Масштабируемый backend электронной коммерции с интеграцией платежей, управлением запасами и системой обработки заказов.",
+                project_view: "Посмотреть Проект →",
+                contact_title: "Давайте Работать Вместе",
+                contact_subtitle: "Готовы воплотить ваш backend проект в жизнь? Давайте обсудим ваши потребности.",
+                contact_get_in_touch: "Связаться",
+                contact_email: "Электронная Почта",
+                contact_location_label: "Местоположение",
+                contact_location_value: "Ташкент, Узбекистан",
+                contact_response_time: "Время Ответа",
+                contact_response_value: "В течение 24 часов",
+                contact_send_message: "Отправить Сообщение",
+                contact_demo_text: "Демо Форма Контакта: Это образец формы для демонстрации портфолио. В производстве это подключится к backend сервису.",
+                contact_name_placeholder: "Ваше Имя",
+                contact_email_placeholder: "Ваша Почта",
+                contact_project_placeholder: "Тип Проекта",
+                contact_message_placeholder: "Ваше Сообщение",
+                contact_send_btn: "Отправить Сообщение",
+                footer_text1: "© 2024 Иззатуллох Каримов. Создано со страстью и точностью.",
+                footer_text2: "Backend Разработчик | Python Специалист | Базируется в Ташкенте, Узбекистан"
+            }
+        };
+
+        let currentLanguage = 'en';
+
+        function translatePage(lang) {
+            currentLanguage = lang;
+            const elements = document.querySelectorAll('[data-translate]');
+            
+            elements.forEach(element => {
+                const key = element.getAttribute('data-translate');
+                if (translations[lang] && translations[lang][key]) {
+                    element.textContent = translations[lang][key];
+                }
+            });
+
+            // Translate placeholders
+            const placeholderElements = document.querySelectorAll('[data-translate-placeholder]');
+            placeholderElements.forEach(element => {
+                const key = element.getAttribute('data-translate-placeholder');
+                if (translations[lang] && translations[lang][key]) {
+                    element.placeholder = translations[lang][key];
+                }
+            });
+
+            // Update language selector
+            document.getElementById('currentLang').textContent = lang.toUpperCase();
+            
+            // Update active language option
+            document.querySelectorAll('.language-option').forEach(option => {
+                option.classList.remove('active');
+                if (option.getAttribute('data-lang') === lang) {
+                    option.classList.add('active');
+                }
+            });
+
+            // Save language preference
+            localStorage.setItem('language', lang);
+        }
+
+        // Enhanced Theme Toggle with Animation
+        function toggleTheme() {
+            const html = document.documentElement;
+            const themeToggle = document.getElementById('themeToggle');
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            // Add animation class
+            themeToggle.classList.add('animating');
+            
+            // Change theme after a short delay for smooth animation
+            setTimeout(() => {
+                html.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+            }, 150);
+            
+            // Remove animation class
+            setTimeout(() => {
+                themeToggle.classList.remove('animating');
+            }, 600);
+        }
+
+        // Initialize theme
+        function initTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+            const theme = savedTheme || systemTheme;
+            
+            document.documentElement.setAttribute('data-theme', theme);
+        }
+
+        // Mobile Menu
+        document.getElementById('mobileMenuBtn').addEventListener('click', function() {
+            const navMenu = document.getElementById('navMenu');
+            navMenu.classList.toggle('active');
+        });
+
+        // Theme toggle click handler
+        document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+
+        // Smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                    // Close mobile menu
+                    document.getElementById('navMenu').classList.remove('active');
+                }
+            });
+        });
+
+        // Project Modal Functions
+        function openProjectModal(projectId) {
+            const modal = document.getElementById(projectId + 'Modal');
+            modal.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modals = document.querySelectorAll('.modal');
+            modals.forEach(modal => {
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                    document.body.style.overflow = 'auto';
+                }
+            });
+        }
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    
+                    // Animate skill bars
+                    const skillBars = entry.target.querySelectorAll('.skill-progress');
+                    skillBars.forEach(bar => {
+                        setTimeout(() => {
+                            bar.classList.add('animate');
+                        }, 300);
+                    });
+                }
+            });
+        }, observerOptions);
+
+        // Observe all animated elements
+        document.querySelectorAll('.fade-in, .slide-in-left, .slide-in-right').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Contact form demo
+        function showContactDemo() {
+            alert('Thank you for your interest! This is a demo portfolio. In a real implementation, this form would send your message to my email and you would receive a response within 24 hours.');
+        }
+
+        // Language Selector Event Handlers
+        document.getElementById('languageBtn').addEventListener('click', function(e) {
+            e.stopPropagation();
+            const dropdown = document.getElementById('languageDropdown');
+            dropdown.classList.toggle('active');
+        });
+
+        // Language option click handlers
+        document.querySelectorAll('.language-option').forEach(option => {
+            option.addEventListener('click', function() {
+                const lang = this.getAttribute('data-lang');
+                translatePage(lang);
+                document.getElementById('languageDropdown').classList.remove('active');
+            });
+        });
+
+        // Close language dropdown when clicking outside
+        document.addEventListener('click', function(e) {
+            const languageSelector = document.querySelector('.language-selector');
+            if (!languageSelector.contains(e.target)) {
+                document.getElementById('languageDropdown').classList.remove('active');
+            }
+        });
+
+        // Initialize language
+        function initLanguage() {
+            const savedLanguage = localStorage.getItem('language') || 'en';
+            translatePage(savedLanguage);
+        }
+
+        // Initialize theme on load
+        initTheme();
+        
+        // Initialize language on load
+        initLanguage();
+
+        // Listen for system theme changes
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+            if (!localStorage.getItem('theme')) {
+                document.documentElement.setAttribute('data-theme', e.matches ? 'dark' : 'light');
+            }
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97597ec8a65af351',t:'MTc1NjI3NTk2NC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
